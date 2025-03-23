@@ -10,6 +10,8 @@
         ul { list-style: none; padding: 0; border: 1px solid #ccc; border-radius: 4px; }
         li { padding: 8px; cursor: pointer; }
         .selected { background-color: #b3d7ff; }
+        .title { font-weight: bold; }
+        .url { font-size: 12px; color: gray; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
     </style>
 </head>
 <body>
@@ -41,7 +43,7 @@
             resultList.innerHTML = "";
             selectedIndex = -1;
             
-            if (query.length < 3) return;
+            if (query.length < 2) return;
             
             const filteredData = data.filter(item => 
                 item.title.toLowerCase().includes(query) ||
@@ -50,7 +52,16 @@
             
             filteredData.forEach((item, index) => {
                 const li = document.createElement("li");
-                li.textContent = `${item.title} - ${item.url}`;
+                const titleSpan = document.createElement("span");
+                const urlSpan = document.createElement("span");
+                
+                titleSpan.textContent = item.title;
+                titleSpan.classList.add("title");
+                urlSpan.textContent = item.url;
+                urlSpan.classList.add("url");
+                
+                li.appendChild(titleSpan);
+                li.appendChild(urlSpan);
                 li.addEventListener("click", () => window.location.href = item.url);
                 resultList.appendChild(li);
             });
@@ -71,6 +82,10 @@
                 item.classList.toggle("selected", index === selectedIndex);
             });
         });
+        
+        window.onload = function() {
+            document.getElementById("search").focus();
+        };
     </script>
 </body>
 </html>
